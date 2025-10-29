@@ -6,8 +6,60 @@
     <title>Task Management App</title>
 </head>
 <body>
-    <header></header>
-    <footer></footer>
+    <header>Task Management App</header>
+   
+    <!-- Adding New Tasks -->
+    
+    <main class = "container">
+        <section>
+            <form id ="taskForm">
+                <!-- Displaying the Task -->
+                <div>
+                    <label for ="taskName">Task Name</label>
+                    <input type ="text" id ="taskName" placeholder="Enter the Task">
+                </div>
+                <div>
+                    <label for ="category">Category</label>
+                    <input type ="text" id ="category" placeholder="Example: Study, Work">
+                </div>
+                <div>
+                    <label for ="deadline">Deadline</label>
+                    <input type ="text" id ="category">
+                </div>
+                <!-- Updating Task -->
+                <div>
+                    <label for ="status">Status</label>
+                    <select id="status">
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                <div>
+                    <button type ="button">Add Task</button>
+                </div>
+             </form>
+        </section>   
+
+                <!-- Filtering Task -->
+
+            <section>
+                <label for ="filterTask">Filter by Task Status: </label>
+                <select id ="filterTask">
+                    <option value ="All">All</option>
+                    <option value ="In Progress">In Progress</option>
+                    <option value ="Completed">Completed</option>
+                    <option value ="Overdue">Overdue</option>
+                </select>
+            </section>    
+
+            <!-- Task List -->
+             <section>
+                <ul id ="taskList"></ul>
+             </section>
+    </main>
+    <footer>
+        <small>& Copyright 2025 Keep your goals falling into Place! </small> 
+    </footer>
     
 </body>
 </html>
