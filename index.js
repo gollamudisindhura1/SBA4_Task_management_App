@@ -13,7 +13,7 @@ const taskCount      = document.getElementById("taskCount");
 
 // Data
 let tasks = [];
-let selectedTaskId = null;
+let selectedTaskId = null; //Keeps track of which task is currently clicked so we can delete it.
 
 // Load from localStorage
 function loadTasks() {
@@ -22,7 +22,7 @@ function loadTasks() {
   render();
 }
 function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  localStorage.setItem("tasks", JSON.stringify(tasks)); //Saves the current tasks array to localStorage as a string using JSON.stringify().
 }
 
 // Check overdue
