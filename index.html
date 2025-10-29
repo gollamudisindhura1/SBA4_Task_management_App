@@ -21,11 +21,11 @@
                 </div>
                 <div>
                     <label for ="category">Category</label>
-                    <input type ="text" id ="category" placeholder="Example: Study, Work">
+                    <input type ="text" id ="taskcategory" placeholder="Example: Study, Work">
                 </div>
                 <div>
                     <label for ="deadline">Deadline</label>
-                    <input type ="text" id ="category">
+                    <input type ="text" id ="taskDeadline">
                 </div>
                 <!-- Updating Task -->
                 <div>
@@ -44,13 +44,15 @@
                 <!-- Filtering Task -->
 
             <section>
-                <label for ="filterTask">Filter by Task Status: </label>
+                <label for ="filterTask">Filter by Status: </label>
                 <select id ="filterTask">
                     <option value ="All">All</option>
                     <option value ="In Progress">In Progress</option>
                     <option value ="Completed">Completed</option>
                     <option value ="Overdue">Overdue</option>
                 </select>
+                <label for ="filterCategory">Filter by Category</label>
+                <button type="applyFilter">Apply Filter</button>
             </section>    
 
             <!-- Task List -->
