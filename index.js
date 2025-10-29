@@ -16,6 +16,7 @@ let tasks = [];
 let selectedTaskId = null; //Keeps track of which task is currently clicked so we can delete it.
 
 // Load from localStorage
+//https://www.freecodecamp.org/news/use-local-storage-in-modern-applications/
 function loadTasks() {
   const saved = localStorage.getItem("tasks");
   if (saved) tasks = JSON.parse(saved);
