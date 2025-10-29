@@ -40,8 +40,9 @@ I would have added more styling to the page.
 
 ## Resource I used 
 Google - for the syntax help and examples
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date- for JavaScript methods and DOM manipulation
-//https://www.freecodecamp.org/news/use-local-storage-in-modern-applications/ - How to filter an Array in JavaScript.
+
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date- for JavaScript methods and DOM manipulation
+- //https://www.freecodecamp.org/news/use-local-storage-in-modern-applications/ - How to filter an Array in JavaScript.
 
 
 
