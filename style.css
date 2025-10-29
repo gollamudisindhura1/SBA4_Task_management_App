@@ -1,23 +1,66 @@
+/* Cozy Fall Colors */
+:root {
+  --pumpkin: #e67e22;
+  --golden: #f39c12;
+  --brown: #8b4513;
+  --cream: #fdf5e6;
+  --soft-orange: #f8d7a3;
+}
+
 body {
-  background: linear-gradient(180deg, #fff3e0, #ffe0b2);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fdf5e6 0%, #f9e4b7 100%);
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
 }
 
-h1,
-h2 {
-  color: #6d4c41;
+.text-brown { color: var(--brown); }
+
+/* Cards */
+.card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-2px);
 }
 
-.task-card {
-  background-color: #fff8e1;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Inputs */
+.form-control, .form-select {
+  border: 1px solid #f39c12;
+  background: #fffdf0;
+  color: var(--brown);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--pumpkin);
+  box-shadow: 0 0 0 0.2rem rgba(230, 126, 34, 0.25);
 }
 
-.task-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Task Item */
+.task-item {
+  background: white;
+  border: 1px solid #f5c77a;
+  border-radius: 12px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.task-item:hover {
+  border-color: var(--pumpkin);
+}
+.task-item.selected {
+  background: #fef9e7;
+  border: 2px solid var(--pumpkin);
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
 }
 
-footer {
-  background: #fbe9e7;
+/* Status Colors */
+.status-in-progress { border-left: 4px solid #f39c12; }
+.status-completed   { border-left: 4px solid #27ae60; }
+.status-overdue     { border-left: 4px solid #dc3545; }
+
+/* Button Disabled */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
