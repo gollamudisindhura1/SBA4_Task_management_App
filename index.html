@@ -1,68 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Task Management App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Planner</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script  defer src="index.js"></script>
 </head>
+
 <body>
-    <header>Task Management App</header>
-   
-    <!-- Adding New Tasks -->
-    
-    <main class = "container">
-        <section>
-            <form id ="taskForm">
-                <!-- Displaying the Task -->
-                <div>
-                    <label for ="taskName">Task Name</label>
-                    <input type ="text" id ="taskName" placeholder="Enter the Task">
-                </div>
-                <div>
-                    <label for ="category">Category</label>
-                    <input type ="text" id ="taskcategory" placeholder="Example: Study, Work">
-                </div>
-                <div>
-                    <label for ="deadline">Deadline</label>
-                    <input type ="text" id ="taskDeadline">
-                </div>
-                <!-- Updating Task -->
-                <div>
-                    <label for ="status">Status</label>
-                    <select id="status">
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                    </select>
-                </div>
-                <div>
-                    <button type ="button">Add Task</button>
-                </div>
-             </form>
-        </section>   
+  <header class="text-center py-4 bg-warning-subtle shadow-sm">
+    <h1 class="fw-bold text-brown">Task Planner</h1>
+    <p class="text-muted">A cozy way to stay on top of your goals</p>
+  </header>
 
-                <!-- Filtering Task -->
+  <main class="container my-5">
+    <div class="row g-4">
 
-            <section>
-                <label for ="filterTask">Filter by Status: </label>
-                <select id ="filterTask">
-                    <option value ="All">All</option>
-                    <option value ="In Progress">In Progress</option>
-                    <option value ="Completed">Completed</option>
-                    <option value ="Overdue">Overdue</option>
-                </select>
-                <label for ="filterCategory">Filter by Category</label>
-                <button type="applyFilter">Apply Filter</button>
-            </section>    
+      <!-- Sidebar Panel -->
+      <aside class="col-12 col-lg-4">
+        <div class="card shadow-sm border-0 p-4 h-100">
+          <h2 class="h5 text-center mb-3">Add New Task</h2>
 
-            <!-- Task List -->
-             <section>
-                <ul id ="taskList"></ul>
-             </section>
-    </main>
-    <footer>
-        <small>& Copyright 2025 Keep your goals falling into Place! </small> 
-    </footer>
-    
+          <form id="taskForm" class="d-flex flex-column gap-3">
+            <input
+              type="text" id="taskName" class="form-control" placeholder="Task name" aria-required/>
+            <input
+              type="text" id="taskCategory" class="form-control" placeholder="Category (e.g., Work, Study)" aria-required/>
+            <input type="date" id="taskDeadline" class="form-control" aria-required />
+
+            <select id="taskStatus" class="form-select">
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+
+            <button type="submit" class="btn btn-success w-100 mt-2">Add Task</button>
+          </form>
+
+          <hr class="my-4" />
+
+          <h3 class="h6 text-center mb-3">Filter Tasks</h3>
+          <div class="d-flex flex-column gap-2">
+            <select id="filterStatus" class="form-select">
+              <option value="All">All Statuses</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="Overdue">Overdue</option>
+            </select>
+            <input
+              type="text"
+              id="filterCategory"
+              class="form-control"
+              placeholder="Filter by category"
+            />
+            <button id="applyFilter" class="btn btn-primary mt-2">Apply Filter</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Task Display Area -->
+      <section class="col-12 col-lg-8">
+        <div class="card shadow-sm border-0 p-4 h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5">My Tasks</h2>
+            <small class="text-muted" id="taskCount">0 Tasks</small>
+          </div>
+          <div id="taskList" class="d-flex flex-column gap-3"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="text-center py-3 text-muted small">
+    © 2025 Autumn Task Planner — Stay productive this season!
+  </footer>
+
+  
 </body>
 </html>
