@@ -1,0 +1,38 @@
+body{
+    background: linear-gradient(to bottom right, #fff3cd, #ffe0b2);
+    min-height: 100vh;
+    font-family: "poppins", sans-serif;
+}
+
+header, footer{
+    background-color: #ffd54f;
+}
+
+.list-group-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff8e1;
+    border: 1px solid #ffcc80;
+}
+
+.task-completed{
+    background-color: #dcedc8;
+    border-left: 5px solid #8bc34a;
+}
+
+.task-overdue{
+    background-color: #ffcdd2;
+    border-left: 5px solid #f44336;
+}
+
+@media(max-width: 480px){
+    body{
+        font-size: 14px;
+    }
+    #addTaskBtn{
+        width: 100%
+    }
+
+}
+
