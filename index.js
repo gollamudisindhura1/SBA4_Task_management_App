@@ -1,31 +1,30 @@
 // DOM Elements
-const taskForm       = document.getElementById("taskForm");
-const taskName       = document.getElementById("taskName");
-const taskCategory   = document.getElementById("taskCategory");
-const taskDeadline   = document.getElementById("taskDeadline");
-const taskStatus     = document.getElementById("taskStatus");
-const filterStatus   = document.getElementById("filterStatus");
+const taskForm = document.getElementById("taskForm");
+const taskName = document.getElementById("taskName");
+const taskCategory = document.getElementById("taskCategory");
+const taskDeadline = document.getElementById("taskDeadline");
+const taskStatus = document.getElementById("taskStatus");
+const filterStatus = document.getElementById("filterStatus");
 const filterCategory = document.getElementById("filterCategory");
-const applyFilter    = document.getElementById("applyFilter");
-const removeTaskBtn  = document.getElementById("removeTask");
-const taskList       = document.getElementById("taskList");
-const taskCount      = document.getElementById("taskCount");
+const applyFilter = document.getElementById("applyFilter");
+const removeTaskBtn = document.getElementById("removeTask");
+const taskList = document.getElementById("taskList");
+const taskCount = document.getElementById("taskCount");
 
-// Safe lowercase helper (prevents crash on undefined/null)
+// Safe lowercase
 const lower = (s) => (s || '').toString().toLowerCase();
 
-// Data
 let tasks = [];
-let selectedTaskId = null; // Tracks selected task for deletion
+let selectedTaskId = null;
 
-// Load from localStorage with defaults
+// LOAD TASKS — FIX: Add id if missing
 function loadTasks() {
   const saved = localStorage.getItem("tasks");
   if (saved) {
     tasks = JSON.parse(saved).map(t => ({
-      id: t.id,
+      id: t.id || Date.now(),  // ← CRITICAL: Prevent undefined id
       name: t.name || "Untitled",
-      category: t.category || "Uncategorized",
+      category: t.category,
       deadline: t.deadline || "",
       status: t.status || "In Progress"
     }));
@@ -37,16 +36,15 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Check overdue 
+// Check Overdue
 function checkOverdue() {
   const today = new Date().toISOString().split("T")[0];
   tasks.forEach(t => {
-    if (t.status === "Completed") return; // Don't touch completed tasks
-
+    if (t.status === "Completed") return;
     if (t.deadline < today && t.status !== "Overdue") {
       t.status = "Overdue";
     } else if (t.deadline >= today && t.status === "Overdue") {
-      t.status = "In Progress"; // Reset if deadline is future
+      t.status = "In Progress";
     }
   });
 }
@@ -77,7 +75,7 @@ taskForm.addEventListener("submit", e => {
   render();
 });
 
-// Update Task Status
+// Update Status
 function updateStatus(id, newStatus) {
   const task = tasks.find(t => t.id === id);
   if (task) {
@@ -87,14 +85,14 @@ function updateStatus(id, newStatus) {
   }
 }
 
-// Select Task for Removal
+// Select Task
 function selectTask(id) {
   selectedTaskId = id;
   render();
   removeTaskBtn.disabled = false;
 }
 
-// Remove Selected Task
+// Delete Task
 removeTaskBtn.addEventListener("click", () => {
   if (!selectedTaskId) return;
   if (confirm("Remove this task?")) {
@@ -105,24 +103,25 @@ removeTaskBtn.addEventListener("click", () => {
   }
 });
 
-// Render Tasks
+// RENDER — FIX: Use addEventListener instead of onchange=""
 function render(filter = {}) {
   checkOverdue();
   let filtered = tasks;
 
-  // Filter by status
   if (filter.status && filter.status !== "All") {
     filtered = filtered.filter(t => t.status === filter.status);
   }
 
-  // Filter by category — SAFE with lower()
   if (filter.category) {
-    filtered = filtered.filter(t =>
-      lower(t.category).includes(lower(filter.category))
-    );
+    const search = lower(filter.category);
+    filtered = filtered.filter(t => {
+      if (t.category === undefined) {
+        return search === "undefined" || search === "uncategorized";
+      }
+      return lower(t.category).includes(search);
+    });
   }
 
-  // Clear list
   taskList.innerHTML = "";
   taskCount.textContent = `${filtered.length} Task${filtered.length !== 1 ? 's' : ''}`;
 
@@ -134,26 +133,33 @@ function render(filter = {}) {
 
   filtered.forEach(task => {
     const div = document.createElement("div");
-    div.className = `task-item p-3 border rounded status-${task.status.toLowerCase().replace(" ", "-")} ${
-      task.id === selectedTaskId ? "selected bg-light" : ""
-    }`;
+    div.className = `task-item p-3 border rounded status-${task.status.toLowerCase().replace(" ", "-")} ${task.id === selectedTaskId ? "selected bg-light" : ""}`;
     div.onclick = () => selectTask(task.id);
 
     div.innerHTML = `
       <div class="d-flex justify-content-between align-items-start">
         <div>
           <strong>${task.name}</strong>
-          <span class="badge bg-secondary ms-2">${task.category}</span>
+          <span class="badge bg-secondary ms-2">
+            ${task.category === undefined ? "Uncategorized" : (task.category || "Uncategorized")}
+          </span>
           <br>
           <small>Due: ${task.deadline} | <strong>${task.status}</strong></small>
         </div>
-        <select class="form-select form-select-sm w-auto" onchange="updateStatus(${task.id}, this.value)">
-          <option value="In Progress" ${task.status === "In Progress" ? "selected" : ""}>In Progress</option>
-          <option value="Completed" ${task.status === "Completed" ? "selected" : ""}>Completed</option>
-          <option value="Overdue" ${task.status === "Overdue" ? "selected" : ""} disabled>Overdue</option>
-        </select>
       </div>
     `;
+
+    // CREATE SELECT SAFELY
+    const select = document.createElement("select");
+    select.className = "form-select form-select-sm w-auto";
+    select.innerHTML = `
+      <option value="In Progress" ${task.status === "In Progress" ? "selected" : ""}>In Progress</option>
+      <option value="Completed" ${task.status === "Completed" ? "selected" : ""}>Completed</option>
+      <option value="Overdue" ${task.status === "Overdue" ? "selected" : ""} disabled>Overdue</option>
+    `;
+    select.addEventListener("change", () => updateStatus(task.id, select.value));
+
+    div.querySelector(".d-flex").appendChild(select);
     taskList.appendChild(div);
   });
 }
@@ -166,6 +172,6 @@ applyFilter.addEventListener("click", () => {
   });
 });
 
-// Init
+// Start
 loadTasks();
-console.log("Task Planner script loaded successfully");
+console.log("Task Planner loaded — SAFE & FIXED!");
