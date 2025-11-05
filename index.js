@@ -11,32 +11,45 @@ const removeTaskBtn  = document.getElementById("removeTask");
 const taskList       = document.getElementById("taskList");
 const taskCount      = document.getElementById("taskCount");
 
+// Safe lowercase helper (prevents crash on undefined/null)
+const lower = (s) => (s || '').toString().toLowerCase();
+
 // Data
 let tasks = [];
-let selectedTaskId = null; //Keeps track of which task is currently clicked so we can delete it.
+let selectedTaskId = null; // Tracks selected task for deletion
 
-// Load from localStorage
-//https://www.freecodecamp.org/news/use-local-storage-in-modern-applications/
+// Load from localStorage with defaults
 function loadTasks() {
   const saved = localStorage.getItem("tasks");
-  if (saved) tasks = JSON.parse(saved);
+  if (saved) {
+    tasks = JSON.parse(saved).map(t => ({
+      id: t.id,
+      name: t.name || "Untitled",
+      category: t.category || "Uncategorized",
+      deadline: t.deadline || "",
+      status: t.status || "In Progress"
+    }));
+  }
   render();
 }
+
 function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks)); //Saves the current tasks array to localStorage as a string using JSON.stringify().
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Check overdue
+// Check overdue 
 function checkOverdue() {
   const today = new Date().toISOString().split("T")[0];
   tasks.forEach(t => {
-    if (t.status !== "Completed") {
-      // Mark overdue if deadline passed; otherwise mark as In Progress
-      t.status = t.deadline < today ? "Overdue" : "In Progress";
+    if (t.status === "Completed") return; // Don't touch completed tasks
+
+    if (t.deadline < today && t.status !== "Overdue") {
+      t.status = "Overdue";
+    } else if (t.deadline >= today && t.status === "Overdue") {
+      t.status = "In Progress"; // Reset if deadline is future
     }
   });
 }
-
 
 // Add Task
 taskForm.addEventListener("submit", e => {
@@ -45,8 +58,6 @@ taskForm.addEventListener("submit", e => {
   const category = taskCategory.value.trim();
   const deadline = taskDeadline.value;
 
-// prevent empty task submissions
-
   if (!name || !category || !deadline) {
     alert("Please fill all fields!");
     return;
@@ -54,7 +65,9 @@ taskForm.addEventListener("submit", e => {
 
   const task = {
     id: Date.now(),
-    name, category, deadline,
+    name,
+    category,
+    deadline,
     status: taskStatus.value
   };
 
@@ -77,7 +90,7 @@ function updateStatus(id, newStatus) {
 // Select Task for Removal
 function selectTask(id) {
   selectedTaskId = id;
-  render(); // Re-render to highlight
+  render();
   removeTaskBtn.disabled = false;
 }
 
@@ -94,23 +107,23 @@ removeTaskBtn.addEventListener("click", () => {
 
 // Render Tasks
 function render(filter = {}) {
-  checkOverdue(); // always check overdue status before displaying
+  checkOverdue();
   let filtered = tasks;
 
-// Filter by status
+  // Filter by status
   if (filter.status && filter.status !== "All") {
     filtered = filtered.filter(t => t.status === filter.status);
   }
-// filter by category
+
+  // Filter by category — SAFE with lower()
   if (filter.category) {
     filtered = filtered.filter(t =>
-      t.category&& t.category.toLowerCase().includes(filter.category.toLowerCase())
+      lower(t.category).includes(lower(filter.category))
     );
   }
 
-// this clears the old content
+  // Clear list
   taskList.innerHTML = "";
-  removeTaskBtn.disabled = true
   taskCount.textContent = `${filtered.length} Task${filtered.length !== 1 ? 's' : ''}`;
 
   if (filtered.length === 0) {
@@ -122,9 +135,9 @@ function render(filter = {}) {
   filtered.forEach(task => {
     const div = document.createElement("div");
     div.className = `task-item p-3 border rounded status-${task.status.toLowerCase().replace(" ", "-")} ${
-      task.id === selectedTaskId ? "selected bg-light" : ""  
-	    }`;   
-			 div.onclick = () => selectTask(task.id);
+      task.id === selectedTaskId ? "selected bg-light" : ""
+    }`;
+    div.onclick = () => selectTask(task.id);
 
     div.innerHTML = `
       <div class="d-flex justify-content-between align-items-start">
@@ -155,4 +168,4 @@ applyFilter.addEventListener("click", () => {
 
 // Init
 loadTasks();
-console.log("✅ Task Planner script loaded successfully");
+console.log("Task Planner script loaded successfully");
